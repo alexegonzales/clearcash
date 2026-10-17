@@ -11,4 +11,5 @@ class AppColors {
   static const seafoam = Color(0xFF7FBC8C);
   static const black = Color(0xFF111111);
   static const white = Color(0xFFFFFFFF);
+  static const darkTeal = Color(0xFF2A7F7A);
 }

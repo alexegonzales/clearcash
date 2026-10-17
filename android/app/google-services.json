@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1069576810751",
+    "project_id": "clearcash-f6a2a",
+    "storage_bucket": "clearcash-f6a2a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069576810751:android:5cc58491638ccd38211cca",
+        "android_client_info": {
+          "package_name": "com.alexe.clearcash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVXSO7loYY62uFZWah6PpT9H9XaEayqZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
