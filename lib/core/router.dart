@@ -6,7 +6,7 @@ import '../features/auth/splash_screen.dart';
 import '../features/auth/welcome_screen.dart';
 import '../features/auth/login_screen.dart';
 import '../features/auth/signup_screen.dart';
-import '../features/home/home_screen.dart';
+import '../features/shell/main_shell.dart';
 
 class _AuthNotifier extends ChangeNotifier {
   late final StreamSubscription<User?> _sub;
@@ -28,7 +28,8 @@ final router = GoRouter(
   redirect: (context, state) {
     final loggedIn = FirebaseAuth.instance.currentUser != null;
     final loc = state.matchedLocation;
-    final isAuthPage = loc == '/welcome' || loc == '/login' || loc == '/signup';
+    final isAuthPage =
+        loc == '/welcome' || loc == '/login' || loc == '/signup';
 
     if (loc == '/') return null; // splash handles its own timing
     if (!loggedIn && !isAuthPage) return '/welcome';
@@ -40,6 +41,6 @@ final router = GoRouter(
     GoRoute(path: '/welcome', builder: (c, s) => const WelcomeScreen()),
     GoRoute(path: '/login', builder: (c, s) => const LoginScreen()),
     GoRoute(path: '/signup', builder: (c, s) => const SignupScreen()),
-    GoRoute(path: '/home', builder: (c, s) => const HomeScreen()),
+    GoRoute(path: '/home', builder: (c, s) => const MainShell()),
   ],
 );
