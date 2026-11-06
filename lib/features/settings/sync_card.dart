@@ -33,40 +33,46 @@ class SyncCard extends StatelessWidget {
           children: [
             const SectionHeader('BACKUP'),
             const SizedBox(height: 10),
-            BrutalCard(
-              color: AppColors.mint,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Cloud backup', style: uStyle(12)),
-                  const SizedBox(height: 6),
-                  Text(
-                    status,
-                    style: mStyle(
-                      11,
-                      weight: FontWeight.w700,
-                      color: statusColor,
+            SizedBox(
+              width: double.infinity,
+              child: BrutalCard(
+                color: AppColors.mint,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Cloud backup', style: uStyle(12)),
+                    const SizedBox(height: 6),
+                    Text(
+                      status,
+                      style: mStyle(
+                        11,
+                        weight: FontWeight.w700,
+                        color: statusColor,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 18),
-            BrutalButton(
-              label: s.syncing ? 'Syncing...' : 'Sync now',
-              color: AppColors.green,
-              onPressed: s.syncing
-                  ? null
-                  : () async {
-                      final ok = await SyncService.instance.sync();
-                      if (context.mounted && ok) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Everything is backed up.'),
-                          ),
-                        );
-                      }
-                    },
+            SizedBox(
+              width: double.infinity,
+              child: BrutalButton(
+                label: s.syncing ? 'Syncing...' : 'Sync now',
+                color: AppColors.green,
+                onPressed: s.syncing
+                    ? null
+                    : () async {
+                        final ok = await SyncService.instance.sync();
+                        if (context.mounted && ok) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Everything is backed up.'),
+                            ),
+                          );
+                        }
+                      },
+              ),
             ),
           ],
         );

@@ -3,11 +3,16 @@ import 'package:flutter/material.dart';
 import 'core/router.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
+import 'features/lock/lock_gate.dart';
+import 'features/lock/lock_service.dart';
+import 'features/reminder/reminder_service.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await LockService.instance.init();
+  await ReminderService.instance.init();
   runApp(const ClearCashApp());
 }
 
@@ -26,7 +31,7 @@ class ClearCashApp extends StatelessWidget {
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 430),
-            child: child,
+            child: LockGate(child: child ?? const SizedBox.shrink()),
           ),
         ),
       ),

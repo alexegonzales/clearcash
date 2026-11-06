@@ -4,6 +4,8 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/brutal_widgets.dart';
 import '../../data/tx_store.dart';
 import '../auth/auth_service.dart';
+import 'lock_tile.dart';
+import 'reminder_tile.dart';
 import 'sync_card.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -133,6 +135,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       _row('Currency', '₱ PHP'),
                     ],
                   ),
+                  const SizedBox(height: 26),
+                  const LockTile(),
+                  const SizedBox(height: 26),
+                  const ReminderTile(),
                   const SizedBox(height: 26),
                   const SyncCard(),
                   const SizedBox(height: 26),

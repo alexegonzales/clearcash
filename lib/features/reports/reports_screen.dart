@@ -4,6 +4,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/brutal_tabs.dart';
 import '../../core/theme/brutal_widgets.dart';
 import '../../data/tx_store.dart';
+import 'export_sheet.dart';
 
 /// Reports & analytics, built from the real transactions.
 class ReportsScreen extends StatefulWidget {
@@ -118,10 +119,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
               title: 'Reports',
               subtitle: '6-MONTH OVERVIEW',
               color: AppColors.teal,
-              trailing: const BrutalTag(
-                'PDF ↓',
-                color: AppColors.black,
-                textColor: AppColors.white,
+              trailing: GestureDetector(
+                onTap: () => showExportSheet(context),
+                child: const BrutalTag(
+                  'EXPORT ↓',
+                  color: AppColors.black,
+                  textColor: AppColors.white,
+                ),
               ),
             ),
             BrutalTabStrip(
