@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/brutal_widgets.dart';
 import 'auth_service.dart';
+import 'google_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -103,6 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 label: _loading ? 'Please wait...' : 'Log In',
                 onPressed: _loading ? null : _logIn,
               ),
+              const GoogleButton(),
               const SizedBox(height: 24),
               Center(
                 child: GestureDetector(

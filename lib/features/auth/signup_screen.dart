@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/brutal_widgets.dart';
 import 'auth_service.dart';
+import 'google_button.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -91,6 +92,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 color: AppColors.green,
                 onPressed: _loading ? null : _signUp,
               ),
+              const GoogleButton(),
               const SizedBox(height: 24),
               Center(
                 child: GestureDetector(

@@ -113,6 +113,8 @@ flutter_launcher_icons:
   image_path: "assets/icon/icon.png"
   adaptive_icon_background: "#04302C"
   adaptive_icon_foreground: "assets/icon/icon_foreground.png"
-
-dependency_overrides:
-  image: 4.8.0
+  web:
+    generate: true
+    image_path: "assets/icon/icon.png"
+    background_color: "#04302C"
+    theme_color: "#04302C"

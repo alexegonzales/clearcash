@@ -5,8 +5,9 @@ import '../../core/theme/brutal_tabs.dart';
 import '../../core/theme/brutal_widgets.dart';
 import '../../data/tx_store.dart';
 import 'export_sheet.dart';
+import 'report_views.dart';
 
-/// Reports & analytics, built from the real transactions.
+/// Reports & analytics: OVERVIEW (6 months), MONTHLY and YEARLY.
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
 
@@ -16,6 +17,12 @@ class ReportsScreen extends StatefulWidget {
 
 class _ReportsScreenState extends State<ReportsScreen> {
   int _tab = 0;
+
+  static const _subtitles = [
+    '6-MONTH OVERVIEW',
+    'ONE MONTH AT A TIME',
+    'YEAR AT A GLANCE',
+  ];
 
   static const _monthNames = [
     'JAN',
@@ -85,8 +92,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
     ],
   );
 
-  @override
-  Widget build(BuildContext context) {
+  // ----------------------------------------------------------------- OVERVIEW
+
+  Widget _overview() {
     return ListenableBuilder(
       listenable: TxStore.instance,
       builder: (context, _) {
@@ -113,178 +121,178 @@ class _ReportsScreenState extends State<ReportsScreen> {
         ];
         final total = values.fold<double>(0, (a, b) => a + b);
 
-        return Column(
+        return ListView(
+          padding: const EdgeInsets.fromLTRB(14, 14, 14, 24),
           children: [
-            BrutalTopBar(
-              title: 'Reports',
-              subtitle: '6-MONTH OVERVIEW',
-              color: AppColors.teal,
-              trailing: GestureDetector(
-                onTap: () => showExportSheet(context),
-                child: const BrutalTag(
-                  'EXPORT ↓',
-                  color: AppColors.black,
-                  textColor: AppColors.white,
-                ),
-              ),
-            ),
-            BrutalTabStrip(
-              labels: const ['OVERVIEW', 'MONTHLY', 'YEARLY'],
-              index: _tab,
-              onTap: (i) => setState(() => _tab = i),
-            ),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(14, 14, 14, 24),
+            BrutalHeaderCard(
+              title: 'INCOME VS EXPENSES',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BrutalHeaderCard(
-                    title: 'INCOME VS EXPENSES',
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  Container(
+                    height: 100,
+                    padding: const EdgeInsets.only(left: 4),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide(color: AppColors.black, width: 3),
+                        bottom: BorderSide(color: AppColors.black, width: 3),
+                      ),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Container(
-                          height: 100,
-                          padding: const EdgeInsets.only(left: 4),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              left: BorderSide(
-                                color: AppColors.black,
-                                width: 3,
-                              ),
-                              bottom: BorderSide(
-                                color: AppColors.black,
-                                width: 3,
-                              ),
-                            ),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              for (var i = 0; i < months.length; i++) ...[
-                                if (i > 0) const SizedBox(width: 8),
-                                Expanded(
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      _bar(
-                                        _h(months[i].incomeCents, maxV),
-                                        i == months.length - 1
-                                            ? AppColors.cyan
-                                            : AppColors.teal,
-                                      ),
-                                      const SizedBox(width: 2),
-                                      _bar(
-                                        _h(months[i].expenseCents, maxV),
-                                        i == months.length - 1
-                                            ? AppColors.pink
-                                            : AppColors.sage,
-                                      ),
-                                    ],
-                                  ),
+                        for (var i = 0; i < months.length; i++) ...[
+                          if (i > 0) const SizedBox(width: 8),
+                          Expanded(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                _bar(
+                                  _h(months[i].incomeCents, maxV),
+                                  i == months.length - 1
+                                      ? AppColors.cyan
+                                      : AppColors.teal,
+                                ),
+                                const SizedBox(width: 2),
+                                _bar(
+                                  _h(months[i].expenseCents, maxV),
+                                  i == months.length - 1
+                                      ? AppColors.pink
+                                      : AppColors.sage,
                                 ),
                               ],
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Row(
-                          children: [
-                            const SizedBox(width: 4),
-                            for (var i = 0; i < months.length; i++) ...[
-                              if (i > 0) const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  _monthNames[months[i].month.month - 1],
-                                  textAlign: TextAlign.center,
-                                  style: mStyle(
-                                    8,
-                                    weight: i == months.length - 1
-                                        ? FontWeight.w700
-                                        : FontWeight.w400,
-                                    color: i == months.length - 1
-                                        ? AppColors.black
-                                        : AppColors.muted,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            _legend('Income', AppColors.teal),
-                            const SizedBox(width: 10),
-                            _legend('Expenses', AppColors.sage),
-                          ],
-                        ),
-                        if (maxV == 0) ...[
-                          const SizedBox(height: 8),
-                          Text(
-                            'Add transactions to see your chart.',
-                            style: mStyle(10, color: AppColors.muted),
+                            ),
                           ),
                         ],
                       ],
                     ),
                   ),
-                  const SizedBox(height: 14),
-                  BrutalHeaderCard(
-                    title: 'SPENDING BREAKDOWN — ${_monthNames[now.month - 1]}',
-                    child: total == 0
-                        ? Text(
-                            'No expenses this month yet.',
-                            style: mStyle(11, weight: FontWeight.w700),
-                          )
-                        : Row(
-                            children: [
-                              SizedBox(
-                                width: 90,
-                                height: 90,
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    CustomPaint(
-                                      size: const Size(90, 90),
-                                      painter: _DonutPainter(values, [
-                                        for (var i = 0; i < values.length; i++)
-                                          _palette[i % _palette.length],
-                                      ]),
-                                    ),
-                                    Text(
-                                      _compact(total.round()),
-                                      style: uStyle(8),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    for (var i = 0; i < names.length; i++)
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 5,
-                                        ),
-                                        child: _legend(
-                                          '${names[i]} — ${(values[i] / total * 100).round()}%',
-                                          _palette[i % _palette.length],
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      const SizedBox(width: 4),
+                      for (var i = 0; i < months.length; i++) ...[
+                        if (i > 0) const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            _monthNames[months[i].month.month - 1],
+                            textAlign: TextAlign.center,
+                            style: mStyle(
+                              8,
+                              weight: i == months.length - 1
+                                  ? FontWeight.w700
+                                  : FontWeight.w400,
+                              color: i == months.length - 1
+                                  ? AppColors.black
+                                  : AppColors.muted,
+                            ),
                           ),
+                        ),
+                      ],
+                    ],
                   ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      _legend('Income', AppColors.teal),
+                      const SizedBox(width: 10),
+                      _legend('Expenses', AppColors.sage),
+                    ],
+                  ),
+                  if (maxV == 0) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      'Add transactions to see your chart.',
+                      style: mStyle(10, color: AppColors.muted),
+                    ),
+                  ],
                 ],
               ),
+            ),
+            const SizedBox(height: 14),
+            BrutalHeaderCard(
+              title: 'SPENDING BREAKDOWN — ${_monthNames[now.month - 1]}',
+              child: total == 0
+                  ? Text(
+                      'No expenses this month yet.',
+                      style: mStyle(11, weight: FontWeight.w700),
+                    )
+                  : Row(
+                      children: [
+                        SizedBox(
+                          width: 90,
+                          height: 90,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              CustomPaint(
+                                size: const Size(90, 90),
+                                painter: _DonutPainter(values, [
+                                  for (var i = 0; i < values.length; i++)
+                                    _palette[i % _palette.length],
+                                ]),
+                              ),
+                              Text(_compact(total.round()), style: uStyle(8)),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              for (var i = 0; i < names.length; i++)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 5),
+                                  child: _legend(
+                                    '${names[i]} — ${(values[i] / total * 100).round()}%',
+                                    _palette[i % _palette.length],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
             ),
           ],
         );
       },
+    );
+  }
+
+  // -------------------------------------------------------------------- BUILD
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        BrutalTopBar(
+          title: 'Reports',
+          subtitle: _subtitles[_tab],
+          color: AppColors.teal,
+          trailing: GestureDetector(
+            onTap: () => showExportSheet(context),
+            child: const BrutalTag(
+              'EXPORT ↓',
+              color: AppColors.black,
+              textColor: AppColors.white,
+            ),
+          ),
+        ),
+        BrutalTabStrip(
+          labels: const ['OVERVIEW', 'MONTHLY', 'YEARLY'],
+          index: _tab,
+          onTap: (i) => setState(() => _tab = i),
+        ),
+        Expanded(
+          child: _tab == 0
+              ? _overview()
+              : _tab == 1
+              ? const MonthlyView()
+              : const YearlyView(),
+        ),
+      ],
     );
   }
 }
